@@ -1,0 +1,116 @@
+@startuml
+title Enemy Factory Method Pattern
+
+package "aircraft" {
+    abstract class AbstractAircraft {
+        # maxHp: int
+        # hp: int
+        + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+        + decreaseHp(int decrease): void
+        + getHp(): int
+        + {abstract} shoot(): List<BaseBullet>
+    }
+
+    abstract class AbstractEnemy {
+        # score: int
+        # dropProbability: double
+        + AbstractEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score, double dropProbability)
+        + getScore(): int
+        + getDropProbability(): double
+        + {abstract} shoot(): List<BaseBullet>
+    }
+
+    class MobEnemy {
+        + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): List<BaseBullet>
+    }
+
+    class EliteEnemy {
+        - shootCycle: int
+        - shootCounter: int
+        + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): List<BaseBullet>
+    }
+
+    class ElitePlusEnemy {
+        - shootCycle: int
+        - shootCounter: int
+        + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): List<BaseBullet>
+    }
+
+    class EliteProEnemy {
+        - shootCycle: int
+        - shootCounter: int
+        + EliteProEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): List<BaseBullet>
+    }
+
+    class BossEnemy {
+        + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): List<BaseBullet>
+    }
+}
+
+package "factory" {
+    interface EnemyFactory {
+        + {abstract} createEnemy(): AbstractEnemy
+    }
+
+    class MobEnemyFactory {
+        + createEnemy(): AbstractEnemy
+    }
+
+    class EliteEnemyFactory {
+        + createEnemy(): AbstractEnemy
+    }
+
+    class ElitePlusEnemyFactory {
+        + createEnemy(): AbstractEnemy
+    }
+
+    class EliteProEnemyFactory {
+        + createEnemy(): AbstractEnemy
+    }
+
+    class BossEnemyFactory {
+        + createEnemy(): AbstractEnemy
+    }
+}
+
+AbstractAircraft <|-- AbstractEnemy
+AbstractEnemy <|-- MobEnemy
+AbstractEnemy <|-- EliteEnemy
+AbstractEnemy <|-- ElitePlusEnemy
+AbstractEnemy <|-- EliteProEnemy
+AbstractEnemy <|-- BossEnemy
+
+EnemyFactory <|.. MobEnemyFactory
+EnemyFactory <|.. EliteEnemyFactory
+EnemyFactory <|.. ElitePlusEnemyFactory
+EnemyFactory <|.. EliteProEnemyFactory
+EnemyFactory <|.. BossEnemyFactory
+
+EnemyFactory ..> AbstractEnemy : creates
+MobEnemyFactory ..> MobEnemy : instantiates
+EliteEnemyFactory ..> EliteEnemy : instantiates
+ElitePlusEnemyFactory ..> ElitePlusEnemy : instantiates
+EliteProEnemyFactory ..> EliteProEnemy : instantiates
+BossEnemyFactory ..> BossEnemy : instantiates
+
+note top of EnemyFactory
+    **Factory Method Pattern**
+    工厂方法接口，声明创建敌机的方法
+end note
+
+note top of MobEnemyFactory
+    **Concrete Creator**
+    具体工厂类，创建普通敌机实例
+end note
+
+@enduml

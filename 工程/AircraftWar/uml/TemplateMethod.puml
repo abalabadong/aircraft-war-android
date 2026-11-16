@@ -1,0 +1,14 @@
+@startuml
+' Template Method Pattern UML for AircraftWar-base
+abstract class AbstractGame {
+    +action() : void
+    #beforeGameLoop() : void
+    #abstract gameLoop() : void
+    #afterGameLoop() : void
+}
+class Game {
+    +action() : void
+    ...
+}
+AbstractGame --|> Game
+@enduml

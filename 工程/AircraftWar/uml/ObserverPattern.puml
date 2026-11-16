@@ -1,0 +1,33 @@
+@startuml
+interface PropObserver {
+    +onBomb()
+    +onFreeze()
+}
+
+abstract class AbstractPropSubject {
+    -observers: List<PropObserver>
+    +addObserver(observer: PropObserver)
+    +removeObserver(observer: PropObserver)
+    +notifyObservers()
+}
+
+class BombSupply extends AbstractPropSubject {
+    +effect()
+    +notifyObservers()
+}
+
+class FreezeSupply extends AbstractPropSubject {
+    +effect()
+    +notifyObservers()
+}
+
+PropObserver <|.. EliteEnemy
+PropObserver <|.. ElitePlusEnemy
+PropObserver <|.. EliteProEnemy
+PropObserver <|.. BossEnemy
+
+AbstractPropSubject <|-- BombSupply
+AbstractPropSubject <|-- FreezeSupply
+
+AbstractPropSubject "1" o-- "*" PropObserver : observers
+@enduml

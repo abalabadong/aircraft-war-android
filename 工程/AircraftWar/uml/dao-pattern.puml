@@ -1,0 +1,86 @@
+@startuml
+skinparam backgroundColor #FEFEFE
+skinparam classBackgroundColor #FFFFFF
+skinparam classArrowColor #000000
+skinparam classBorderColor #000000
+skinparam stereotypeCBackgroundColor #E8E8E8
+
+title DAO Pattern - Aircraft War Score Management\n实验四：数据访问对象(DAO)模式应用
+
+package "DAO" {
+    interface ScoreDao {
+        + addScore(record: ScoreRecord): void
+        + getAllScores(): List<ScoreRecord>
+        + deleteScore(index: int): void
+        + displayLeaderboard(): void
+    }
+
+    class ScoreRecord {
+        - playerName: String
+        - score: int
+        - recordTime: String
+        + ScoreRecord(playerName: String, score: int)
+        + getPlayerName(): String
+        + getScore(): int
+        + getRecordTime(): String
+        + toString(): String
+    }
+
+    class ScoreDaoImpl {
+        - scoreRecords: List<ScoreRecord>
+        - filePath: String
+        + ScoreDaoImpl(difficulty: String)
+        - loadScores(): void
+        - saveScores(): void
+        + addScore(record: ScoreRecord): void
+        + getAllScores(): List<ScoreRecord>
+        + deleteScore(index: int): void
+        + displayLeaderboard(): void
+    }
+}
+
+package "application" {
+    class Game {
+        - score: int
+        - scoreDao: ScoreDao
+        + Game()
+        + action(): void
+        - checkResultAction(): void
+    }
+}
+
+' 关系定义
+ScoreDao <|.. ScoreDaoImpl : implements
+ScoreDaoImpl --> ScoreRecord : uses / manages
+Game --> ScoreDao : uses
+
+' 注释说明
+note top of ScoreRecord
+  <b>Value Object (VO)</b>
+  封装单局游戏得分记录
+  - 玩家名称
+  - 得分
+  - 记录时间
+end note
+
+note top of ScoreDao
+  <b>DAO Interface</b>
+  定义数据访问操作的
+  抽象接口
+end note
+
+note top of ScoreDaoImpl
+  <b>DAO Implementation</b>
+  实现文件读写和排序逻辑
+  - 文件存储: scores_{difficulty}.txt
+  - 自动按分数降序排序
+end note
+
+note right of Game
+  <b>业务逻辑类</b>
+  游戏结束时调用DAO:
+  1. 保存当前得分
+  2. 显示排行榜
+end note
+
+@enduml

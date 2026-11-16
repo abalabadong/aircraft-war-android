@@ -1,0 +1,70 @@
+@startuml
+' 简单工厂模式 - 道具创建
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+}
+
+title 简单工厂模式 (Simple Factory Pattern)
+
+' 产品接口
+interface Prop {
+    + activate(HeroAircraft hero): void
+}
+
+' 具体产品类
+class BloodProp implements Prop {
+    + activate(HeroAircraft hero): void
+}
+
+class FireProp implements Prop {
+    + activate(HeroAircraft hero): void
+}
+
+class FirePlusProp implements Prop {
+    + activate(HeroAircraft hero): void
+}
+
+class BombProp implements Prop {
+    + activate(HeroAircraft hero): void
+}
+
+class FreezeProp implements Prop {
+    + activate(HeroAircraft hero): void
+}
+
+' 简单工厂类
+class PropFactory {
+    + {static} createProp(String type): Prop
+}
+
+' 关系：工厂依赖产品接口（虚线箭头）
+PropFactory ..> Prop
+
+' 关系：具体产品实现产品接口（实线空心三角）
+Prop <|.. BloodProp
+Prop <|.. FireProp
+Prop <|.. FirePlusProp
+Prop <|.. BombProp
+Prop <|.. FreezeProp
+
+note right of PropFactory
+<b>简单工厂模式</b>
+
+由一个工厂类根据传入参数
+决定创建并返回哪一种产品实例
+
+工厂类通常设计为无状态的
+静态工具类
+end note
+
+note bottom of BloodProp
+<b>具体产品</b>
+BloodProp、FireProp、FirePlusProp、
+BombProp、FreezeProp 五种道具
+end note
+
+@enduml

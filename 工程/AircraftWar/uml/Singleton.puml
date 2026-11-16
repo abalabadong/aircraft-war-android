@@ -1,0 +1,40 @@
+@startuml
+title HeroAircraft Singleton Pattern
+
+    abstract class HeroAircraft {
+        - {static} volatile HeroAircraft instance
+        - int shootNum
+        - int power
+        - int direction
+        - int firePower
+        - int fireDuration
+
+        + {static} getInstance(): HeroAircraft
+        - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): List<BaseBullet>
+        + addFirePower(int firePower): void
+        + addFireDuration(int fireDuration): void
+        + getFirePower(): int
+        + getFireDuration(): int
+        + decreaseFireDuration(): void
+        + hasFireSupply(): boolean
+    }
+
+class List {
+}
+
+class BaseBullet {
+}
+
+
+
+note right of HeroAircraft::getInstance
+    **线程安全的单例实现**
+    1. 第一次检查避免不必要的同步
+    2. synchronized保证线程安全
+    3. 第二次检查确保实例唯一性
+    4. volatile防止指令重排序
+end note
+
+@enduml

@@ -1,0 +1,62 @@
+@startuml
+title Supply Simple Factory Pattern
+
+package "supply" {
+    abstract class AbstractSupply {
+        # effectTime: int
+        + AbstractSupply(int locationX, int locationY, int speedX, int speedY, int effectTime)
+        + {abstract} effect(): void
+    }
+
+    class BloodSupply {
+        - healAmount: int
+        + BloodSupply(int locationX, int locationY, int speedX, int speedY)
+        + effect(): void
+    }
+
+    class FireSupply {
+        + FireSupply(int locationX, int locationY, int speedX, int speedY)
+        + effect(): void
+    }
+
+    class FirePlusSupply {
+        + FirePlusSupply(int locationX, int locationY, int speedX, int speedY)
+        + effect(): void
+    }
+
+    class BombSupply {
+        + BombSupply(int locationX, int locationY, int speedX, int speedY)
+        + effect(): void
+    }
+
+    class FreezeSupply {
+        + FreezeSupply(int locationX, int locationY, int speedX, int speedY)
+        + effect(): void
+    }
+
+    class SupplyFactory {
+        - SupplyFactory()
+        + {static} createSupply(String type, int x, int y): AbstractSupply
+    }
+}
+
+AbstractSupply <|-- BloodSupply
+AbstractSupply <|-- FireSupply
+AbstractSupply <|-- FirePlusSupply
+AbstractSupply <|-- BombSupply
+AbstractSupply <|-- FreezeSupply
+
+note top of SupplyFactory
+    **Simple Factory Pattern**
+    简单工厂类，根据类型参数
+    创建并返回不同道具实例
+end note
+
+SupplyFactory ..> AbstractSupply : creates
+SupplyFactory ..> BloodSupply : instantiates
+SupplyFactory ..> FireSupply : instantiates
+SupplyFactory ..> FirePlusSupply : instantiates
+SupplyFactory ..> BombSupply : instantiates
+SupplyFactory ..> FreezeSupply : instantiates
+
+@enduml

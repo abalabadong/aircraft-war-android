@@ -1,0 +1,109 @@
+@startuml StrategyPattern
+
+title 策略模式 - 射击策略 (FireStrategy)
+
+package "strategy" {
+    interface FireStrategy {
+        + fire(aircraft: AbstractAircraft): List<BaseBullet>
+    }
+
+    class NoFireStrategy {
+        + fire(aircraft: AbstractAircraft): List<BaseBullet>
+    }
+
+    class SingleLineStrategy {
+        + fire(aircraft: AbstractAircraft): List<BaseBullet>
+    }
+
+    class DoubleLineStrategy {
+        + fire(aircraft: AbstractAircraft): List<BaseBullet>
+    }
+
+    class CircleStrategy {
+        - BULLET_COUNT: int = 20
+        + fire(aircraft: AbstractAircraft): List<BaseBullet>
+    }
+
+    class SpreadStrategy {
+        + fire(aircraft: AbstractAircraft): List<BaseBullet>
+    }
+
+    class HeroSpreadStrategy {
+        + fire(aircraft: AbstractAircraft): List<BaseBullet>
+    }
+
+    class HeroCircleStrategy {
+        - BULLET_COUNT: int = 20
+        + fire(aircraft: AbstractAircraft): List<BaseBullet>
+    }
+}
+
+package "aircraft" {
+    abstract class AbstractAircraft {
+    }
+
+    class AbstractEnemy {
+        - score: int
+        - dropProbability: double
+        # fireStrategy: FireStrategy
+        + setFireStrategy(strategy: FireStrategy): void
+        + shoot(): List<BaseBullet>
+    }
+
+    class HeroAircraft {
+        - instance: HeroAircraft
+        - fireStrategy: FireStrategy
+        - fireDuration: int
+        + setFireStrategy(strategy: FireStrategy): void
+        + shoot(): List<BaseBullet>
+    }
+
+    class MobEnemy
+    class EliteEnemy
+    class ElitePlusEnemy
+    class EliteProEnemy
+    class BossEnemy
+}
+
+package "edu.hitsz.bullet" {
+    abstract class BaseBullet
+    class EnemyBullet
+    class HeroBullet
+}
+
+' 实现关系
+FireStrategy <|.. NoFireStrategy
+FireStrategy <|.. SingleLineStrategy
+FireStrategy <|.. DoubleLineStrategy
+FireStrategy <|.. CircleStrategy
+FireStrategy <|.. SpreadStrategy
+FireStrategy <|.. HeroSpreadStrategy
+FireStrategy <|.. HeroCircleStrategy
+
+' 继承关系
+AbstractAircraft <|-- AbstractEnemy
+AbstractEnemy <|-- MobEnemy
+AbstractEnemy <|-- EliteEnemy
+AbstractEnemy <|-- ElitePlusEnemy
+AbstractEnemy <|-- EliteProEnemy
+AbstractEnemy <|-- BossEnemy
+
+AbstractAircraft <|-- HeroAircraft
+
+BaseBullet <|-- EnemyBullet
+BaseBullet <|-- HeroBullet
+
+' 关联关系
+AbstractEnemy --> FireStrategy: 使用 >
+HeroAircraft --> FireStrategy: 使用 >
+
+' 依赖关系
+NoFireStrategy ..> BaseBullet: 返回
+SingleLineStrategy ..> EnemyBullet: 创建
+DoubleLineStrategy ..> EnemyBullet: 创建
+CircleStrategy ..> EnemyBullet: 创建
+SpreadStrategy ..> EnemyBullet: 创建
+HeroSpreadStrategy ..> HeroBullet: 创建
+HeroCircleStrategy ..> HeroBullet: 创建
+
+@enduml

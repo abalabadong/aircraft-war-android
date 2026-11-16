@@ -1,0 +1,83 @@
+@startuml
+title Fire Strategy Pattern
+
+package "strategy" {
+    interface FireStrategy {
+        + {abstract} fire(AbstractAircraft aircraft): List<BaseBullet>
+    }
+
+    class NoFireStrategy {
+        + fire(AbstractAircraft aircraft): List<BaseBullet>
+    }
+
+    class SingleLineStrategy {
+        + fire(AbstractAircraft aircraft): List<BaseBullet>
+    }
+
+    class DoubleLineStrategy {
+        + fire(AbstractAircraft aircraft): List<BaseBullet>
+    }
+
+    class SpreadStrategy {
+        + fire(AbstractAircraft aircraft): List<BaseBullet>
+    }
+
+    class CircleStrategy {
+        + fire(AbstractAircraft aircraft): List<BaseBullet>
+    }
+}
+
+package "aircraft" {
+    abstract class AbstractAircraft {
+        # fireStrategy: FireStrategy
+        # shootCycle: int
+        # shootCounter: int
+        + setFireStrategy(FireStrategy strategy): void
+        + shoot(): List<BaseBullet>
+    }
+}
+
+FireStrategy <|.. NoFireStrategy
+FireStrategy <|.. SingleLineStrategy
+FireStrategy <|.. DoubleLineStrategy
+FireStrategy <|.. SpreadStrategy
+FireStrategy <|.. CircleStrategy
+
+AbstractAircraft "1" *--> "1" FireStrategy : uses
+
+note top of FireStrategy
+    **Strategy Pattern**
+    策略接口，声明射击方法
+end note
+
+note top of AbstractAircraft
+    **Context**
+    上下文类，维护策略引用
+end note
+
+note bottom of NoFireStrategy
+    不发射策略
+    用于普通敌机
+end note
+
+note bottom of SingleLineStrategy
+    单排直射策略
+    用于精英敌机
+end note
+
+note bottom of DoubleLineStrategy
+    双排直射策略
+    用于精锐敌机
+end note
+
+note bottom of SpreadStrategy
+    散射策略
+    用于王牌敌机、英雄机(火力)
+end note
+
+note bottom of CircleStrategy
+    环射策略
+    用于Boss敌机、英雄机(超级火力)
+end note
+
+@enduml

@@ -1,0 +1,119 @@
+@startuml
+' 工厂方法模式 - 敌机创建
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+}
+
+title 工厂方法模式 (Factory Method Pattern)
+
+' ========== Product 产品系列 ==========
+abstract class AbstractAircraft {
+    + shoot(): List<BaseBullet>
+    + getScore(): int
+}
+
+note right of AbstractAircraft
+<b>Product（产品）</b>
+定义敌机公共行为接口
+声明所有敌机共有的方法
+end note
+
+class MobEnemy extends AbstractAircraft
+class EliteEnemy extends AbstractAircraft
+class ElitePlusEnemy extends AbstractAircraft
+class AceEnemy extends AbstractAircraft
+class BossEnemy extends AbstractAircraft
+
+' ========== Creator 创建者系列 ==========
+interface EnemyFactory {
+    + createEnemy(int x, int y, double m): AbstractAircraft
+}
+
+note right of EnemyFactory
+<b>Creator（创建者）</b>
+声明工厂方法 createEnemy()
+返回类型为 Product
+定义创建对象的接口
+end note
+
+class MobEnemyFactory implements EnemyFactory {
+    + createEnemy(int x, int y, double m): AbstractAircraft
+}
+
+class EliteEnemyFactory implements EnemyFactory {
+    + createEnemy(int x, int y, double m): AbstractAircraft
+}
+
+class ElitePlusEnemyFactory implements EnemyFactory {
+    + createEnemy(int x, int y, double m): AbstractAircraft
+}
+
+class AceEnemyFactory implements EnemyFactory {
+    + createEnemy(int x, int y, double m): AbstractAircraft
+}
+
+class BossEnemyFactory implements EnemyFactory {
+    - difficulty: GameDifficulty
+    + BossEnemyFactory(GameDifficulty difficulty)
+    + createEnemy(int x, int y, double m): AbstractAircraft
+}
+
+note right of BossEnemyFactory
+<b>Concrete Creator（具体创建者）</b>
+重写工厂方法，负责创建
+对应的具体敌机产品
+
+具体工厂可有不同状态
+（如 BossEnemyFactory 
+包含 difficulty 属性）
+end note
+
+' ========== 关系 ==========
+
+' 具体创建者实现创建者接口（实线空心三角）
+EnemyFactory <|.. MobEnemyFactory
+EnemyFactory <|.. EliteEnemyFactory
+EnemyFactory <|.. ElitePlusEnemyFactory
+EnemyFactory <|.. AceEnemyFactory
+EnemyFactory <|.. BossEnemyFactory
+
+' 创建者依赖产品（虚线箭头）
+EnemyFactory ..> AbstractAircraft
+
+' 具体创建者创建具体产品（<<create>>虚线箭头）
+MobEnemyFactory ..> MobEnemy : <<create>>
+EliteEnemyFactory ..> EliteEnemy : <<create>>
+ElitePlusEnemyFactory ..> ElitePlusEnemy : <<create>>
+AceEnemyFactory ..> AceEnemy : <<create>>
+BossEnemyFactory ..> BossEnemy : <<create>>
+
+' 具体产品继承产品（实线空心三角）
+AbstractAircraft <|-- MobEnemy
+AbstractAircraft <|-- EliteEnemy
+AbstractAircraft <|-- ElitePlusEnemy
+AbstractAircraft <|-- AceEnemy
+AbstractAircraft <|-- BossEnemy
+
+note bottom of MobEnemy
+<b>Concrete Products（具体产品）</b>
+实现具体业务逻辑的敌机类
+end note
+
+note bottom of MobEnemyFactory
+<b>工厂方法模式</b>
+
+定义创建对象的接口，让子类决定
+实例化哪个类，符合开闭原则
+
+<b>四个角色：</b>
+• Creator：声明工厂方法
+• Concrete Creator：重写方法创建具体产品
+• Product：定义产品接口
+• Concrete Products：实现具体业务
+end note
+
+@enduml
